@@ -54,6 +54,14 @@ define application
   LUCI_BUILD_PACKAGES += luci-app-$(1)
 endef
 
+define Package/luci-app-samba4/conffiles
+/etc/config/samba4
+endef
+
+$(eval $(call application,samba4,LuCI Support for Samba4,\
+	+PACKAGE_luci-app-samba4:samba44-server))
+
+
 define Package/luci-app-aria2/conffiles
 /etc/config/aria2
 endef
@@ -61,6 +69,15 @@ endef
 $(eval $(call application,aria2,LuCI Support for Aria2,\
 	+PACKAGE_luci-app-aria2:aria2 \
 	+PACKAGE_luci-app-aria2:yaaw))
+
+
+
+define Package/luci-app-shadowsocks-libev-obfs/conffiles
+/etc/config/shadowsocks-libev
+endef
+
+$(eval $(call application,shadowsocks-libev-obfs,LuCI Support for Shadowsocks-libev-obfs,\
+	+PACKAGE_luci-app-shadowsocks-libev-obfs:shadowsocks-libev-obfs-openssl ))
 
 
 ### Compile ###
