@@ -62,13 +62,29 @@ $(eval $(call application,samba4,LuCI Support for Samba4,\
 	+PACKAGE_luci-app-samba4:samba44-server))
 
 
-define Package/luci-app-aria2/conffiles
-/etc/config/aria2
+#define Package/luci-app-aria2/conffiles
+#/etc/config/aria2
+#endef
+
+#$(eval $(call application,aria2,LuCI Support for Aria2,\
+#	+PACKAGE_luci-app-aria2:aria2 \
+#	+PACKAGE_luci-app-aria2:yaaw))
+
+
+define Package/luci-app-ngrokc/conffiles
+/etc/config/ngrokc
 endef
 
-$(eval $(call application,aria2,LuCI Support for Aria2,\
-	+PACKAGE_luci-app-aria2:aria2 \
-	+PACKAGE_luci-app-aria2:yaaw))
+$(eval $(call application,ngrokc,LuCI Support for Ngrokc,\
+	+PACKAGE_luci-app-ngrokc:ngrokc))
+
+
+define Package/luci-app-qos-guoguo/conffiles
+/etc/config/qos_guoguo
+endef
+
+$(eval $(call application,qos-guoguo,LuCI Support for qos-guoguo,\
+	+PACKAGE_luci-app-qos-guoguo:qos-guoguo))
 
 
 
