@@ -88,6 +88,54 @@ $(eval $(call application,qos-guoguo,LuCI Support for qos-guoguo,\
 
 
 
+define Package/luci-app-adkill/conffiles
+/etc/config/adkill
+endef
+
+$(eval $(call application,adkill,LuCI Support for adkill,\
+	+PACKAGE_luci-app-adkill:kmod-adkill))
+
+
+define Package/luci-app-redsocks2-alt/conffiles
+/etc/config/redsocks2
+endef
+
+$(eval $(call application,redsocks2-alt,LuCI Support for redsocks2-alt,\
+	+PACKAGE_luci-app-redsocks2-alt:redsocks2-alt))
+
+
+define Package/luci-app-chinadns/conffiles
+/etc/config/chinadns
+endef
+
+$(eval $(call application,chinadns,LuCI Support for chinadns,\
+	+PACKAGE_luci-app-chinadns:ChinaDNS))
+
+define Package/luci-app-vlmcsd/conffiles
+/etc/config/vlmcsd
+endef
+
+$(eval $(call application,vlmcsd,LuCI Support for vlmcsd,\
+	+PACKAGE_luci-app-vlmcsd:vlmcsd))
+
+
+define Package/luci-app-vsftpd/conffiles
+/etc/config/vsftpd
+endef
+
+$(eval $(call application,vsftpd,LuCI Support for vsftpd,\
+	+PACKAGE_luci-app-vsftpd:vsftpd-aio))
+
+
+define Package/luci-app-w8021x/conffiles
+/etc/config/w8021x
+endef
+
+$(eval $(call application,w8021x,LuCI Support for w8021x,\
+	+PACKAGE_luci-app-w8021x:w8021x))
+
+
+
 define Package/luci-app-shadowsocks-libev-obfs/conffiles
 /etc/config/shadowsocks-libev
 endef

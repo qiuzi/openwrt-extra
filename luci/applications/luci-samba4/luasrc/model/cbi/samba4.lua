@@ -26,6 +26,7 @@ s:taboption("general", Value, "description", translate("Description"))
 s:taboption("general", Value, "workgroup", translate("Workgroup"))
 s:taboption("general", Flag, "homes", translate("Share home-directories"))
 s:taboption("general", Flag, "disablenb", translate("Disable netbios"))
+s:taboption("general", Flag, "hotplug", translate("Hotplug"), translate("Automatically add to shares when new drives attached."))
 
 tmpl = s:taboption("template", Value, "_tmpl",
 	translate("Edit the template that is used for generating the samba configuration."), 
