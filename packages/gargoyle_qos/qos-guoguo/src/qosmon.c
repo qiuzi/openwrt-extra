@@ -35,6 +35,15 @@
 #include <errno.h>
 #include <time.h>
 
+//fix musl compatibility
+#include <sys/param.h>
+#ifndef __UCLIBC__
+#include <limits.h>
+typedef void (*__sighandler_t)(int);
+//#define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
+//#define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
+#endif
+
 #include "utils.h"
 #include "tc_util.h"
 #include "tc_common.h"
