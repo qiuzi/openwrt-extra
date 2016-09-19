@@ -48,6 +48,7 @@ MAKEOPTS:= -C $(LINUX_DIR) \
 
 define Build/Prepare
 	$(call Build/Prepare/Default)
+	cp -r src-common/. $(PKG_BUILD_DIR)
 	cp -r src-$(KERNEL_VER)/. $(PKG_BUILD_DIR)
 	$(CP) obj/*.o_shipped $(PKG_BUILD_DIR)/
 endef

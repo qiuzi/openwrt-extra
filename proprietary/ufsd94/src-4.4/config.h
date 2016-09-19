@@ -135,7 +135,7 @@
 #define HAVE_DECL_PUT_LINK_V1 0
 
 /* void (*put_link) (struct inode *, void *); */
-#define HAVE_DECL_PUT_LINK_V2 0
+#define HAVE_DECL_PUT_LINK_V2 1
 
 /* int (*fsync) (struct file *, struct dentry *, int datasync); */
 #define HAVE_DECL_FO_FSYNC_V1 0
@@ -393,13 +393,13 @@
 #define HAVE_STRUCT_INODE_OPERATIONS_SET_ACL 1
 
 /* Define to 1 if `get_link' is a member of `struct inode_operations'. */
-#define HAVE_STRUCT_INODE_OPERATIONS_GET_LINK 1
+/* #undef HAVE_STRUCT_INODE_OPERATIONS_GET_LINK */
 
 /* Define to 1 if `put_link' is a member of `struct inode_operations'. */
-/* #undef HAVE_STRUCT_INODE_OPERATIONS_PUT_LINK */
+#define HAVE_STRUCT_INODE_OPERATIONS_PUT_LINK 1
 
 /* Define to 1 if `follow_link' is a member of `struct inode_operations'. */
-/* #undef HAVE_STRUCT_INODE_OPERATIONS_FOLLOW_LINK */
+#define HAVE_STRUCT_INODE_OPERATIONS_FOLLOW_LINK 1
 
 /* Define to 1 if `ki_flags' is a member of `struct kiocb'. */
 /* #undef HAVE_STRUCT_KIOCB_KI_FLAGS */
