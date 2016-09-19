@@ -21,7 +21,7 @@ s.anonymous = true
 s:tab("general",  translate("General Settings"))
 s:tab("template", translate("Edit Template"))
 
-s:taboption("general", Value, "enabled", translate("Enabled"))
+s:taboption("general", Flag, "enabled", translate("Enabled"))
 s:taboption("general", Value, "name", translate("Hostname"))
 s:taboption("general", Value, "description", translate("Description"))
 s:taboption("general", Value, "workgroup", translate("Workgroup"))

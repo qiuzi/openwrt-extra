@@ -87,18 +87,20 @@ smb_add_share() {
 	local name
 	local path
 	local users
-	local public
+	#local public
 	local writable
 	local printable
 	local create_mask
+	local guest_ok
 
 	config_get name $1 name
 	config_get path $1 path
 	config_get users $1 users
-	config_get public $1 public
+	#config_get public $1 public
 	config_get writable $1 writable
 	config_get printable $1 printable
 	config_get create_mask $1 create_mask
+	config_get guest_ok $1 guest_ok
 
 	[ -z "$name" -o -z "$path" ] && return
 
@@ -108,6 +110,8 @@ smb_add_share() {
 	[ -n "$writable" ] && echo -e "\twritable = $writable" >> /var/etc/smb.conf
 	[ -n "$printable" ] && echo -e "\tprintable = $printable" >> /var/etc/smb.conf
 	[ -n "$create_mask" ] && echo -e "\tcreate mask = $create_mask" >> /var/etc/smb.conf
+	[ -n "$guest_ok" ] && echo -e "\tguest ok  = $guest_ok" >> /var/etc/smb.conf
+	[ -n "$guest_ok" ] && echo -e "\tpublic  = $guest_ok" >> /var/etc/smb.conf
 }
 
 
