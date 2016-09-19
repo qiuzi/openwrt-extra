@@ -79,5 +79,17 @@ msgstr ""
 msgid "Workgroup"
 msgstr "工作组"
 
+msgid "Hotplug"
+msgstr "热插拔"
+
+msgid "Automatically add to shares when new drives attached."
+msgstr "插入新驱动器时自动添加共享"
+
+msgid "Disable netbios"
+msgstr "禁用netbios"
+
+msgid "Enabled"
+msgstr "启用"
+
 #~ msgid "Physical Path"
 #~ msgstr "物理路径"
