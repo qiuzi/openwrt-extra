@@ -72,7 +72,7 @@ o = s:option(Value, "local", translate("Listen Address"))
 o.datatype = "host"
 o.placeholder = "0.0.0.0"
 o.default = "0.0.0.0"
-o:depends("use_conf_file", "")
+--o:depends("use_conf_file", "")
 
 o = s:option(Value, "password", translate("Password"))
 o.password = true
@@ -97,6 +97,7 @@ o = s:option(ListValue, "obfs", translate("Obfuscation Method"))
 for i,v in ipairs(obfs_l) do
 	o:value(v)
 end
+o.default = "plain"
 o.rmempty = false
  
 o = s:option(Value, "obfs_param", translate("Obfuscation Parameter"))
@@ -107,6 +108,7 @@ o = s:option(Value, "protocol", translate("Obfuscation Protocol"))
 for i,v in ipairs(p_l) do
 	o:value(v)
 end
+o.default = "origin"
 o.rmempty = false
 
 -- UDP Relay

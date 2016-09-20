@@ -85,9 +85,10 @@ MAKE_FLAGS += \
 	LDFLAGS="$(TARGET_LDFLAGS)"
 
 define Package/shadowsocks-libev-obfs/install
-	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/etc/init.d $(1)/etc/config
 	$(INSTALL_CONF) ./files/shadowsocks.json $(1)/etc
 	$(INSTALL_BIN) ./files/shadowsocks.init $(1)/etc/init.d/shadowsocks-libev
+	$(INSTALL_BIN) ./files/shadowsocks.config $(1)/etc/config/shadowsocks-libev
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/ss-{local,redir,tunnel} $(1)/usr/bin
 endef
