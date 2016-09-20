@@ -30,12 +30,25 @@ o.rmempty = false
 upth = s:option(Value, "path", translate("Path"))
 upth.rmempty = false
 upth.datatype = "directory"
-local upth_suggestions = nixio.fs.glob("/mnt/sd*")
+
+--[[local upth_suggestions = nixio.fs.glob("/mnt/sd*")
 
 if upth_suggestions then
 	local node
 	for node in upth_suggestions do
 		upth:value(node)
+	end
+end
+   ]]--
+if nixio.fs.access("/etc/config/fstab") then
+	upth.titleref = luci.dispatcher.build_url("admin", "system", "fstab")
+	local command = "uci show fstab|grep -E \"\\.target\\=\"|grep -oE \"/[^\\'\\\"]*\"|sed ':a;N;$!ba;s/\\n/:/g'"
+	local upth_suggestions = luci.sys.exec(command)
+
+	if upth_suggestions then
+		for entry in string.gmatch(upth_suggestions, "[^:]+") do
+			upth:value(entry)
+		end
 	end
 end
 
