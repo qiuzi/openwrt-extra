@@ -110,8 +110,7 @@ smb_add_share() {
 	[ -n "$writable" ] && echo -e "\twritable = $writable" >> /var/etc/smb.conf
 	[ -n "$printable" ] && echo -e "\tprintable = $printable" >> /var/etc/smb.conf
 	[ -n "$create_mask" ] && echo -e "\tcreate mask = $create_mask" >> /var/etc/smb.conf
-	[ -n "$guest_ok" ] && echo -e "\tguest ok  = $guest_ok" >> /var/etc/smb.conf
-	[ -n "$guest_ok" ] && echo -e "\tpublic  = $guest_ok" >> /var/etc/smb.conf
+	[ -n "$guest_ok" ] && echo -e "\tguest ok  = $guest_ok\n\tpublic  = $guest_ok" >> /var/etc/smb.conf
 }
 
 

@@ -35,8 +35,8 @@ define application
     SECTION:=luci
     CATEGORY:=LuCI
     TITLE:=LuCI - Lua Configuration Interface
-    URL:=https://github.com/nanpuyue/openwrt-extra/
-    MAINTAINER:=nanpuyue <nanpuyue@gmail.com>
+    URL:=https://github.com/openwrt-stuff/openwrt-extra/
+    MAINTAINER:=maz-1 <ohmygod19993@gmail.com>
     PKGARCH:=all
     SUBMENU:=3. Applications
     TITLE:=$(if $(2),$(2),LuCI $(1) application)
@@ -53,6 +53,33 @@ define application
 
   LUCI_BUILD_PACKAGES += luci-app-$(1)
 endef
+
+### Protocol ###
+define protocol
+  define Package/luci-proto-$(1)
+    SECTION:=luci
+    CATEGORY:=LuCI
+    TITLE:=LuCI - Lua Configuration Interface
+    URL:=https://github.com/openwrt-stuff/openwrt-extra/
+    MAINTAINER:=maz-1 <ohmygod19993@gmail.com>
+    PKGARCH:=all
+    SUBMENU:=5. Protocols
+    TITLE:=$(if $(2),$(2),LuCI $(1) protocol)
+	DEPENDS:=$(3)
+  endef
+
+  define Package/luci-proto-$(1)/install
+	$(call Package/luci/install/template,$$(1),protocol/luci-$(1))
+  endef
+
+  ifneq ($(CONFIG_PACKAGE_luci-proto-$(1)),)
+    LUCI_SELECTED_MODULES+=protocol/luci-$(1)
+  endif
+
+  LUCI_BUILD_PACKAGES += luci-proto-$(1)
+endef
+
+
 
 define Package/luci-app-samba4/conffiles
 /etc/config/samba4
@@ -131,8 +158,47 @@ define Package/luci-app-w8021x/conffiles
 /etc/config/w8021x
 endef
 
+
 $(eval $(call application,w8021x,LuCI Support for w8021x,\
 	+PACKAGE_luci-app-w8021x:w8021x))
+
+define Package/luci-app-nfsd/conffiles
+/etc/config/nfsd
+endef
+
+
+$(eval $(call application,epg-oscam,LuCI Support for epg-oscam,\
+	+PACKAGE_luci-app-epg-oscam:oscam))
+
+define Package/luci-app-epg-oscam/conffiles
+/etc/config/epg
+/etc/config/oscam
+endef
+
+
+$(eval $(call application,nfsd,LuCI Support for nfsd,\
+	+PACKAGE_luci-app-nfsd:nfs-kernel-server))
+
+
+
+$(eval $(call protocol,openvpn,OpenVPN protocol configuration,\
+	+PACKAGE_luci-proto-openvpn:openvpn-client-netifd \
+	+PACKAGE_luci-proto-openvpn:luci-lib-nixio))
+
+$(eval $(call protocol,n2n,N2N protocol configuration,\
+	+PACKAGE_luci-proto-n2n:n2n-edge))
+
+$(eval $(call protocol,shadowvpn,ShadowVPN protocol configuration,\
+	+PACKAGE_luci-proto-shadowvpn:shadowvpn))
+
+
+#define Package/luci-app-rtorrent/conffiles
+#/etc/config/rtorrent
+#endef
+
+#$(eval $(call application,rtorrent,LuCI Support for rtorrent,\
+#	+PACKAGE_luci-app-rtorrent:rtorrent-rpc \
+#	+PACKAGE_luci-app-rtorrent:dtach ))
 
 
 

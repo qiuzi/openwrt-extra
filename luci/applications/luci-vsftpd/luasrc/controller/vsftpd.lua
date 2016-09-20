@@ -1,73 +1,46 @@
 --[[
-LuCI - Lua Configuration Interface - vsftpd support
+LuCI - Lua Configuration Interface
 
-Script by Admin @ NVACG.org (af_xj@hotmail.com , xujun@smm.cn)
-Some codes is based on luci-app-upnp, TKS.
-The Author of luci-app-upnp is Steven Barth <steven@midlink.org> and Jo-Philipp Wich <xm@subsignal.org>
+Copyright 2016 Weijie Gao <hackpascal@gmail.com>
 
-Licensed under the GPL License, Version 3.0 (the "license");
+Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
-you may obtain a copy of the License at
+You may obtain a copy of the License at
 
-	http://www.gnu.org/licenses/gpl.txt
+	http://www.apache.org/licenses/LICENSE-2.0
 
 $Id$
 ]]--
 
-module("luci.controller.vsftpd",package.seeall)
+require("luci.sys")
+
+module("luci.controller.vsftpd", package.seeall)
 
 function index()
-	require("luci.i18n")
-	luci.i18n.loadc("vsftpd")
 	if not nixio.fs.access("/etc/config/vsftpd") then
 		return
 	end
-	
-	local page = entry({"admin","services","vsftpd"},cbi("vsftpd"),_("FTP Service"))
-	page.i18n="vsftpd"
-	page.dependent=true
-	
-	entry({"admin","services","vsftpd","status"}, call("connection_status")).leaf = true
-end
 
-function connection_status()
-  local cmd = io.popen("ps | grep vsftpd | grep -v grep | grep -v IDLE")
-  if cmd then
-    local conn = { }
-    while true do
-      local ln = cmd:read("*l")
-      if not ln then
-        break
-      elseif ln:match("^.%d+.-%d+.%d+.%d+.%d+:.[a-z]+") then
-        local num,ip,act = ln:match("^.(%d+).-(%d+.%d+.%d+.%d+):.([a-z]+)")
-        if num and ip and act then
-            num   = tonumber(num)
-            conn[#conn+1]= {
-              num   = num,
-              ip    = ip,
-              user  = "",
-              act   = act:upper(),
-              file  = ""
-            }
-        end
-        
-      elseif ln:match("^.%d+.-%d+.%d+.%d+.%d+/%w+:.%a+.[%w%p]+") then
-        local num,ip,user,act,file = ln:match("^.(%d+).-(%d+.%d+.%d+.%d+)/(%w+):.(%u+).([%w%p]+)")
-        if num and ip and act then
-            num   = tonumber(num)
-            conn[#conn+1]= {
-              num   = num,
-              ip    = ip,
-              user  = user,
-              act   = act,
-              file  = file
-            }
-        end
-      end
-    end
-  
-  cmd:close()
-  luci.http.prepare_content("application/json")
-  luci.http.write_json(conn)
-  end
+	entry({"admin", "services", "vsftpd"},
+		alias("admin", "services", "vsftpd", "general"),
+		_("FTP Server"))
+
+	entry({"admin", "services", "vsftpd", "general"},
+		cbi("vsftpd/general"),
+		_("General Settings"), 10).leaf = true
+
+	entry({"admin", "services", "vsftpd", "users"},
+		cbi("vsftpd/users"),
+		_("Virtual Users"), 20).leaf = true
+
+	entry({"admin", "services", "vsftpd", "anonymous"},
+		cbi("vsftpd/anonymous"),
+		_("Anonymous User"), 30).leaf = true
+
+	entry({"admin", "services", "vsftpd", "log"},
+		cbi("vsftpd/log"),
+		_("Log Settings"), 40).leaf = true
+
+	entry({"admin", "services", "vsftpd", "item"},
+		cbi("vsftpd/item"), nil).leaf = true
 end
