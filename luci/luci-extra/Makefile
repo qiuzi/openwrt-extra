@@ -151,7 +151,7 @@ define Package/luci-app-vsftpd/conffiles
 endef
 
 $(eval $(call application,vsftpd,LuCI Support for vsftpd,\
-	+PACKAGE_luci-app-vsftpd:vsftpd-aio))
+	+PACKAGE_luci-app-vsftpd:vsftpd-alt))
 
 
 define Package/luci-app-w8021x/conffiles
