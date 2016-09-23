@@ -21,6 +21,7 @@ function index()
 	page.dependent = true
 	entry( {"admin", "services", "amule", "logview"}, call("logread") ).leaf = true
 	entry( {"admin", "services", "amule", "status"}, call("get_pid") ).leaf = true
+	entry( {"admin", "services", "amule", "amulecmd"}, call("amulecmd") ).leaf = true
 	entry( {"admin", "services", "amule", "startstop"}, post("startstop") ).leaf = true
 
 end
@@ -99,4 +100,34 @@ function get_pid(from_lua)
 		luci.http.prepare_content("application/json")
 		luci.http.write_json(status)	
 	end
+end
+
+
+function amulecmd()
+	local re =""
+	local rv   = { }
+	local cmd = luci.http.formvalue("cmd")
+	local uci     = luci.model.uci.cursor()
+        local pass = uci:get("amule", "main", "ec_password")
+        local port = uci:get("amule", "main", "ec_port")
+        local full_cmd = "amulecmd -p "..port.." -P ".."\""..string.gsub(pass, "\"", "\\\"").."\"".." -c \""..cmd.."\" 2>&1"
+
+	local shellpipe = io.popen(full_cmd,"rw")
+	re = shellpipe:read("*a")
+	shellpipe:close()
+	if not re then 
+		re=""
+	end
+	
+	re = string.gsub(re, "\n", "\r\n")
+	
+	rv[#rv+1]=re
+	
+	if #rv > 0 then
+		luci.http.prepare_content("application/json")
+		luci.http.write_json(rv)
+				return
+	end
+
+	luci.http.status(404, "No such device")
 end

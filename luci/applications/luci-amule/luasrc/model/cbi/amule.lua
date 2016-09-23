@@ -43,6 +43,7 @@ s:tab("security", translate("Security"))
 s:tab("remote", translate("External Control"))
 s:tab("template", translate("Edit Template"))
 s:tab("logview", translate("Log File Viewer"))
+s:tab("amulecmd", translate("aMule command"))
 
 -- GENERAL ----------------------------------------------------------------------------------------
 
@@ -245,7 +246,7 @@ end
 
 function shareddir.write(self, section, value)
 	value = value:gsub("\r\n?", "\n")
-	nixio.fs.writefile("//etc/amule/shareddirl.dat", value)
+	nixio.fs.writefile("//etc/amule/shareddir.dat", value)
 end
 
 o = s:taboption("path_and_file", Flag, "ich", translate("Intelligent corruption handling (I.C.H.)"))
@@ -452,6 +453,10 @@ lv.rows		= 50
 function lv.cfgvalue(self, section)
 	return translate("Please press [Read] button")
 end
-       
+
+-- AMULECMD ----------------------------------------------------------------------------------------------
+        
+local cmd	= s:taboption("amulecmd", DummyValue, "_amulecmd")
+cmd.template	= "amule/webshell"
 
 return m

@@ -24,6 +24,14 @@ encrypt_password() {
 	[[ -z $pass_notencryted ]] || sed -i "s/\b$2=$(unregex $pass_notencryted)/$2=$pass_encryted/g" "$1"
 }
 
+write_dat_file() {
+	if [[ -s "$1" ]] ; then
+		cat "$1" > "$2"
+	else
+		[[ -s "$2" ]] && cat "$2" > "$1"
+	fi
+}
+
 set_params() {
 	cat /etc/amule/amule.conf.template > "$config_file"
 	local p; local v; local s="$1"; shift
@@ -45,8 +53,7 @@ set_params() {
 	option_word_to_digit "$config_file" "ProxyType" "socks5/0 socks4/1 http/2 socks4a/3"
 	option_word_to_digit "$config_file" "SeeShare" "anyone/0 friends/1 nobody/2"
 	
-	#encrypt ecpassword
-	
+	#encrypt password
 	encrypt_password "$config_file" "ECPassword"
 	encrypt_password "$config_file" "Password"
 	encrypt_password "$config_file" "PasswordLow"
@@ -68,8 +75,8 @@ amule() {
 	local cmdline
 
 	section_enabled "$section" || return 1
-
-	config_get config_dir "$cfg" 'config_dir' '/var/etc/amule'
+	
+	config_get config_dir "$cfg" 'config_dir' '/var/run/amule'
 	config_get runasuser "$cfg" 'runasuser' 'daemon'
 	config_get incoming_dir "$cfg" 'incoming_dir' "$config_dir/Incoming"
 	config_get temp_dir "$cfg" 'temp_dir' "$config_dir/Temp"
@@ -77,6 +84,18 @@ amule() {
 	config_get config_overwrite "$cfg" config_overwrite 1
 	config_get nice "$cfg" nice 0
 	config_get ionice_flags "$cfg" ionice_flags ''
+	
+	case $(echo "$config_dir"|grep -oE "^/[^/]+") in
+	"/var"|"/tmp"|"/mnt"|"root")
+		true
+	;;
+	*)
+		echo "You should set config_dir to subfolders under /var, /tmp ,/mnt or /root"
+		echo "Otherwise, you may soft-brick your device."
+		return 1
+	;;
+	esac
+	
 	which ionice > /dev/null || ionice_flags=''
 
 	local MEM=$(sed -ne 's!^MemTotal:[[:space:]]*\([0-9]*\) kB$!\1!p' /proc/meminfo)
@@ -85,15 +104,16 @@ amule() {
 	fi
 
 	config_file="$config_dir/amule.conf"
-	[ -d $config_dir ] || {
+	[ -d "$config_dir" ] || {
 		mkdir -m 0755 -p "$config_dir"
 		touch "$config_file" "$config_dir/addresses.dat" "$config_dir/shareddir.dat" \
                     "$config_dir/ipfilter_static.dat"
-		[ -z "$runasuser" ] || chown -R $runasuser $config_dir
+		[ -z "$runasuser" ] || chown -R $runasuser "$config_dir"
 	}
 	touch "$config_file"
-	cat /etc/amule/addresses.dat > "$config_dir/addresses.dat"
-	cat /etc/amule/ipfilter_static.dat > "$config_dir/ipfilter_static.dat"
+	write_dat_file /etc/amule/addresses.dat "$config_dir/addresses.dat"
+	write_dat_file /etc/amule/shareddir.dat "$config_dir/shareddir.dat"
+	write_dat_file /etc/amule/ipfilter_static.dat "$config_dir/ipfilter_static.dat"
 
 	[ "$config_overwrite" == 0 ] || {
 		set_params "$cfg" $(uci show amule|awk -F'[.=]' '{print $3}'|tr '\n' ' ')
@@ -104,7 +124,7 @@ amule() {
 	procd_open_instance
 	procd_set_param command $cmdline
 	procd_set_param respawn retry=60
-	procd_set_param runasuser "$runasuser"
+	procd_set_param user "$runasuser"
 	procd_set_param nice "$nice"
 	if test -z "$USE";then
 		procd_set_param limits core="0 0"
@@ -121,6 +141,7 @@ amule() {
 }
 
 start_service() {
+	killall -9 amuleweb >/dev/null 2>&1
 	config_load 'amule'
 	config_foreach amule 'amule'
 }

@@ -115,8 +115,8 @@ msgstr "代理密码"
 msgid "Kad Nodes Url"
 msgstr "Kad节点URL"
 
-msgid "Ed2k Servers Url"
-msgstr "Ed2k服务器URL"
+msgid "Ed2k Servers List Url"
+msgstr "Ed2k服务器列表URL"
 
 msgid "Remove Dead Server"
 msgstr "删除无效服务器"
@@ -321,3 +321,21 @@ msgstr "aMule守护进程未运行"
 
 msgid "Start aMule"
 msgstr "启动aMule"
+
+msgid "aMule command"
+msgstr "aMule命令"
+
+msgid "aMule Command"
+msgstr "aMule命令"
+
+msgid "You can call amulecmd commands here to control your amule."
+msgstr "你可以在这里运行amulecmd命令以控制你的aMule"
+
+msgid "Execute 'Help' to get more infomation."
+msgstr "执行'Help'命令以获取更多信息"
+
+msgid "Execute"
+msgstr "执行"
+
+msgid "Clear"
+msgstr "清空"

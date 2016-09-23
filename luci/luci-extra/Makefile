@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 LUCI_TOPDIR=..
 
-PKG_NAME:=luci-extra
+PKG_NAME:=luci-extra-maz1
 PKG_RELEASE:=1
 
 PKG_BUILD_PARALLEL:=0
@@ -177,6 +177,28 @@ endef
 
 $(eval $(call application,nfsd,LuCI Support for nfsd,\
 	+PACKAGE_luci-app-nfsd:nfs-kernel-server))
+
+
+define Package/luci-app-n2n/conffiles
+/etc/config/n2n
+endef
+
+$(eval $(call application,n2n,LuCI Support for n2n,\
+	+PACKAGE_luci-app-n2n:n2n-edge \
+	+PACKAGE_luci-app-n2n:n2n-supernode ))
+
+
+define Package/luci-app-macvlan/conffiles
+/etc/config/macvlan
+endef
+
+$(eval $(call application,macvlan,LuCI Support for macvlan,\
+	+PACKAGE_luci-app-macvlan:luci \
+	+PACKAGE_luci-app-macvlan:kmod-macvlan ))
+
+
+$(eval $(call application,webshell,LuCI Support for webshell,\
+	+PACKAGE_luci-app-webshell:luci))
 
 
 define Package/luci-app-amule/conffiles
