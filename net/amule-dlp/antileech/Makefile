@@ -37,6 +37,8 @@ define Build/Prepare
 endef
 
 define Build/Configure
+	sed -i "s:^AC_CHECK_PROG.WXCONFIG,.*::g" $(PKG_BUILD_DIR)/configure.ac
+	sed -i "s:wx-config --cppflags:$(STAGING_DIR)/usr/bin/wx-config --cppflags:g" $(PKG_BUILD_DIR)/configure.ac
 	cd $(PKG_BUILD_DIR) && sh ./autogen.sh
 	$(call Build/Configure/Default)
 endef
@@ -49,8 +51,8 @@ define Build/Compile
 endef
 
 define Package/antileech/install
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/share/amule/libantiLeech.so $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/share/amule
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/share/amule/libantiLeech.so $(1)/usr/share/amule
 endef
 
 $(eval $(call BuildPackage,antileech))

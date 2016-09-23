@@ -158,26 +158,34 @@ define Package/luci-app-w8021x/conffiles
 /etc/config/w8021x
 endef
 
-
 $(eval $(call application,w8021x,LuCI Support for w8021x,\
 	+PACKAGE_luci-app-w8021x:w8021x))
 
-define Package/luci-app-nfsd/conffiles
-/etc/config/nfsd
-endef
-
-
-$(eval $(call application,epg-oscam,LuCI Support for epg-oscam,\
-	+PACKAGE_luci-app-epg-oscam:oscam))
 
 define Package/luci-app-epg-oscam/conffiles
 /etc/config/epg
 /etc/config/oscam
 endef
 
+$(eval $(call application,epg-oscam,LuCI Support for epg-oscam,\
+	+PACKAGE_luci-app-epg-oscam:oscam))
+
+
+define Package/luci-app-nfsd/conffiles
+/etc/config/nfsd
+endef
 
 $(eval $(call application,nfsd,LuCI Support for nfsd,\
 	+PACKAGE_luci-app-nfsd:nfs-kernel-server))
+
+
+define Package/luci-app-amule/conffiles
+/etc/config/amule
+/etc/amule/amule.conf.template
+endef
+
+$(eval $(call application,amule,LuCI Support for amule,\
+	+PACKAGE_luci-app-amule:amule))
 
 
 
