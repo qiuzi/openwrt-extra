@@ -73,6 +73,9 @@ msgstr "UPnP TCP端口"
 msgid "Bind Address"
 msgstr "地址绑定"
 
+msgid "Leave blank to bind all"
+msgstr "留空则全部绑定"
+
 msgid "Default to bind all"
 msgstr "默认全部绑定"
 
