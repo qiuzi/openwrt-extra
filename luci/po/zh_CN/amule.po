@@ -339,3 +339,13 @@ msgstr "执行"
 
 msgid "Clear"
 msgstr "清空"
+
+msgid "Command: "
+msgstr "命令: "
+
+msgid "Download now"
+msgstr "立即下载"
+
+msgid "Existing file will be overwritten, do you really want to proceed?"
+msgstr "已有文件将被覆盖，是否继续？"
+

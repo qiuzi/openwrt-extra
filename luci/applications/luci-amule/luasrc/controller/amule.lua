@@ -11,6 +11,8 @@ You may obtain a copy of the License at
 ]]--
 
 module("luci.controller.amule", package.seeall)
+local uci     = luci.model.uci.cursor()
+local configdir = uci:get("amule", "main", "config_dir")
 
 function index()
 	if not nixio.fs.access("/etc/config/amule") then
@@ -23,6 +25,8 @@ function index()
 	entry( {"admin", "services", "amule", "status"}, call("get_pid") ).leaf = true
 	entry( {"admin", "services", "amule", "amulecmd"}, call("amulecmd") ).leaf = true
 	entry( {"admin", "services", "amule", "startstop"}, post("startstop") ).leaf = true
+	entry( {"admin", "services", "amule", "down_kad"}, post("down_kad") ).leaf = true
+	entry( {"admin", "services", "amule", "down_ed2k"}, post("down_ed2k") ).leaf = true
 
 end
 
@@ -59,6 +63,26 @@ function startstop()
 		end
 	end
 	luci.http.write(tostring(pid))	-- HTTP needs string not number
+end
+
+function down_kad()
+	url = uci:get("amule", "main", "kad_nodes_url")
+        data_path = configdir .. "/nodes.dat"
+        proto = string.gsub(url, "://%S*", "")
+        proto_opt = ( proto == "https" ) and " --no-check-certificate" or ""
+        cmd = "wget -O /tmp/down_nodes.dat \"" .. url .. "\"" .. proto_opt ..
+                " && cat /tmp/down_nodes.dat > " .. "\"" .. data_path .. "\""
+        luci.sys.call(cmd)
+end
+
+function down_ed2k()
+	url = uci:get("amule", "main", "ed2k_servers_url")
+	data_path = configdir .. "/server.met"
+        proto = string.gsub(url, "://%S*", "")
+        proto_opt = ( proto == "https" ) and " --no-check-certificate" or ""
+        cmd = "wget -O /tmp/down_server.met \"" .. url .. "\"" .. proto_opt ..
+                " && cat /tmp/down_server.met > " .. "\"" .. data_path .. "\""
+        luci.sys.call(cmd)
 end
 
 -- called by XHR.poll from detail_startstop.htm
@@ -107,10 +131,9 @@ function amulecmd()
 	local re =""
 	local rv   = { }
 	local cmd = luci.http.formvalue("cmd")
-	local uci     = luci.model.uci.cursor()
-        local pass = uci:get("amule", "main", "ec_password")
+        local pass = string.gsub(uci:get("amule", "main", "ec_password"), "\"", "\\\"")
         local port = uci:get("amule", "main", "ec_port")
-        local full_cmd = "amulecmd -p "..port.." -P ".."\""..string.gsub(pass, "\"", "\\\"").."\"".." -c \""..cmd.."\" 2>&1"
+        local full_cmd = "amulecmd -p "..port.." -P ".."\""..pass.."\"".." -c \""..cmd.."\" 2>&1"
 
 	local shellpipe = io.popen(full_cmd,"rw")
 	re = shellpipe:read("*a")
@@ -118,6 +141,10 @@ function amulecmd()
 	if not re then 
 		re=""
 	end
+	
+	re = string.gsub(re, "This is amulecmd %S*\n", "")
+	re = string.gsub(re, "Creating client%S*\n", "")
+	re = string.gsub(re, "Succeeded! Connection established to aMule %S*\n", "")
 	
 	re = string.gsub(re, "\n", "\r\n")
 	

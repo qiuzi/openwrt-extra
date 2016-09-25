@@ -76,12 +76,11 @@
 }
 </style>
 <div class="cbi-map" id="cbi-system">
-<h3><a id="content" name="content"><%:aMule Command%></a></h3>
 <h4><a id="content" name="content"><%:You can call amulecmd commands here to control your amule.%></a></h4>
 <h4><a id="content" name="content"><%:Execute 'Help' to get more infomation.%></a></h4>
 <textarea id="screen" style="width:100%;height:400px;overflow:auto;font-size:12px;" readonly="readonly" ></textarea>
 <br/>
-<%=translate("command: ")%>
+<%=translate("Command: ")%>
 <input type="text" id="cmd"/>
 <input class="cbi-button cbi-input-button" style="align: center; width: 100%" type="button" onclick="update_status(null)"
 <%= attr("name", section) .. attr("id", cbid .. ".btn2") .. attr("value", translate("Execute")) %> />

@@ -165,11 +165,13 @@ o.rmempty = true
 
 -- SERVER ----------------------------------------------------------------------------------------
 
-o = s:taboption("server", Value, "kad_nodes_url", translate("Kad Nodes Url"))
+o = s:taboption("server", Value, "kad_nodes_url", translate("Kad Nodes Url"), "<script type=\"text/javascript\"></script><input type=\"button\" class=\"cbi-button cbi-button-apply\" value=\"" 
+    .. translate("Download now") .. "\" onclick=\"onclick_down_kad(this.id)\" />")
 o.rmempty = false
 o.placeholder = "http://upd.emule-security.org/nodes.dat"
 
-o = s:taboption("server", Value, "ed2k_servers_url", translate("Ed2k Servers Url"))
+o = s:taboption("server", Value, "ed2k_servers_url", translate("Ed2k Servers List Url"), "<script type=\"text/javascript\"></script><input type=\"button\" class=\"cbi-button cbi-button-apply\" value=\"" 
+    .. translate("Download now") .. "\" onclick=\"onclick_down_ed2k(this.id)\" />")
 o.rmempty = false
 o.placeholder = "http://upd.emule-security.org/server.met"
 

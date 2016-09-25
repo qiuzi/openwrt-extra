@@ -3,7 +3,7 @@ XHR.poll(5, '<%=luci.dispatcher.build_url("admin/services/amule/status")%>', nul
 	function(x, data) {
 		var tb = document.getElementById('amule_status');
 		var btn = document.getElementById("amule_startstop");
-		var btn_tmpl = '<input class="cbi-button cbi-button-apply" style="font-size: 100%;" value="PID: NUMBER"type="button" onclick="onclick_startstop(this.id)">'
+		var btn_tmpl = '<input class="cbi-button cbi-button-apply" id="btn_startstop" style="font-size: 100%;" value="PID: NUMBER"type="button" onclick="onclick_startstop(this.id)">'
 		if (data && tb) {
 			if (data.amuled) {
 				var links = '<em><%:aMule daemon is running.%></em>';
@@ -24,14 +24,46 @@ XHR.poll(5, '<%=luci.dispatcher.build_url("admin/services/amule/status")%>', nul
 		
 	}
 );
-
+function _data2elements(x, data) {
+		var btn = document.getElementById("btn_startstop");
+		if ( ! btn ) { return; }	// security check
+		if (data.amuled_pid == "0") {
+			btn.value = "<%:Start aMule%>";
+			btn.className = "cbi-button cbi-button-apply";
+			btn.disabled = false;
+		} else {
+			btn.value = "PID: " + data.amuled_pid;
+			btn.className = "cbi-button cbi-button-reset";
+			btn.disabled = false;
+		}
+}
 // event handler for start/stop button
 function onclick_startstop(id) {
 	// do start/stop
 	var btnXHR = new XHR();
 	btnXHR.post('<%=url('admin/services/amule/startstop')%>', { token: '<%=token%>' },
-		function(x) { _data2elements(x); }
+		function(x, data) { _data2elements(x, data); }
 	);
+}
+// event handler for download files
+function onclick_down_kad(id) {
+    if(confirm("<%:Existing file will be overwritten, do you really want to proceed?%>"))
+    {
+	var btnXHR = new XHR();
+	btnXHR.post('<%=url('admin/services/amule/down_kad')%>', { token: '<%=token%>' },
+		function(x) {}
+	);
+    }
+}
+
+function onclick_down_ed2k(id) {
+    if(confirm("<%:Existing file will be overwritten, do you really want to proceed?%>"))
+    {
+	var btnXHR = new XHR();
+	btnXHR.post('<%=url('admin/services/amule/down_ed2k')%>', { token: '<%=token%>' },
+		function(x) {}
+	);
+    }
 }
 
 function openWebUI() {
