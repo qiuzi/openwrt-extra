@@ -179,7 +179,7 @@ o = s:taboption("server", Flag, "remove_dead_server", translate("Remove Dead Ser
 o.rmempty = false
 
 o = s:taboption("server", Value, "dead_server_retry", translate("Dead Server Retry"))
-o:depends("remove_dead_server", "1")
+--o:depends("remove_dead_server", "1")
 o.datatype = "uinteger"
 o.rmempty = false
 o.placeholder = "3"
